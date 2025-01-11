@@ -11,7 +11,13 @@ import { SpinnerProvider } from './Components/ButtonComponent';
 
 function App() {
     const navigate = useNavigate();
-    useEffect(()=>{window.location.pathname == "/" && navigate("/album")},[])
+    useEffect(()=>{
+      if(window.location.pathname != "/"){
+        navigate("/album")
+      } else if(window.location.pathname == "/list"){
+        navigate("/list")
+      }
+    },[])
     document.querySelectorAll('button').forEach(element=>{
       element.onclick = function(){}
   })
