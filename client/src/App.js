@@ -11,10 +11,10 @@ function App() {
     const navigate = useNavigate();
     useEffect(()=>{
       console.log(window.location.pathname)
-      if(window.location.pathname == "/"){
-        navigate("/list")
+      if(window.location.pathname == "/" || window.location.pathname == "/index.html"){
+        navigate("/album")
       }
-    },[window.location])
+    },[])
     document.querySelectorAll('button').forEach(element=>{
       element.onclick = function(){}
   })
@@ -23,8 +23,8 @@ function App() {
       <>
           <Routes>
             <Route path="/folder/:id" element={<Folder/>}/>
-            <Route path='/album' element={<Main/>}/>
             <Route path='/list' element={<Main/>}/>
+            <Route path='/album' element={<Main/>}/>
           </Routes>
       </>
     )
