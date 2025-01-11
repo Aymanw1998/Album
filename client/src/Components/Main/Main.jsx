@@ -74,7 +74,15 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
         console.log(folder)
         if (folder.type == 'folder') {
             console.log(folder._id);
+            for(const thisFile of folder.children){
+                console.log(thisFile.id, thisFile.parent._id);
+                try{
+                    await SERVER.removeFileFromFolder(folder._id, thisFile.id);
+                }catch(err){        
+                    console.error("Error delete file:", err);
+                }
             await SERVER.deleteF(folder._id);
+            }
         } else {
             for(const thisFile of data){
                 console.log(thisFile.id, thisFile.parent._id);
