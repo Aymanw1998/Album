@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 // Route middleware
-app.get('/', (req, res) => { console.log("erver is up and running");res.send('Server is up and running'); });
+app.use('/', (req, res) => { console.log("erver is up and running");res.send('Server is up and running'); });
 const folder = require("./routes/folder")
 app.use('/api/folders', folder)
 
