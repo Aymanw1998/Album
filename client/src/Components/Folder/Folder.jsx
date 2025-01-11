@@ -14,7 +14,6 @@ import DOWNLOAD from "../../images/download.png"
 import {SERVER} from "../../services/Folder.service"
 import ButtonComponent from '../ButtonComponent';
 
-import {BarLoader} from "react-spinners";
 
 import "./Folder.css"
 const Folder = ({ data, addFile, deleteItem, moveItem , depth = 0}) => {
