@@ -7,16 +7,14 @@ import "./App.css"
 import Main from './Components/Main/Main';
 import Folder from './Components/Folder/Folder'
 
-import { SpinnerProvider } from './Components/ButtonComponent';
-
 function App() {
     const navigate = useNavigate();
     useEffect(()=>{
       console.log(window.location.pathname)
-      if(window.location.pathname != "/list"){
+      if(window.location.pathname == "/"){
         navigate("/album")
       } else if(window.location.pathname == "/list"){
-        navigate("/list")
+        //navigate("/list")
       }
     },[])
     document.querySelectorAll('button').forEach(element=>{
