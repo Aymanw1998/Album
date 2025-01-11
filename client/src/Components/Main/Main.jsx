@@ -71,9 +71,10 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
     };
 
     const deleteItem = async (data, folder) => {
-        console.log(data, folder)
-        if (data.type === 'folder') {
-            await SERVER.deleteF(data._id);
+        console.log(folder)
+        if (folder.type == 'folder') {
+            console.log(folder._id);
+            await SERVER.deleteF(folder._id);
         } else {
             for(const thisFile of data){
                 console.log(thisFile.id, thisFile.parent._id);

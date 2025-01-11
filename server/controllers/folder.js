@@ -57,6 +57,7 @@ const deleteByID =  async (req, res) => {
     try{
         // delete folders
         const { id } = req.params;
+        console.log(req.params);
         await Folder.findByIdAndDelete(id);
         return res.status(200).json({ message: "Folder deleted successfully" });
     } catch(err) {

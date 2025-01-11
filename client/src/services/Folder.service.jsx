@@ -1,7 +1,7 @@
 // Folder.service.jsx
 import axios from "axios";
-const URL = "https://album-server.onrender.com";
-// //"http://localhost:2025";
+// const URL = "https://album-server.onrender.com";
+const URL = "http://localhost:2025";
 const BID = `${URL}/api/folders`;
 
 const handleError = (error) => {
@@ -44,6 +44,7 @@ const updateF = async(id, data) => {
 
 const deleteF = async(id) => {
     try{
+        console.log(id);
         const res = await axios.delete(`${BID}/${id}`);
         const result = {data: res.data, err: false };
         console.log("result", result);
