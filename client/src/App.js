@@ -12,7 +12,7 @@ function App() {
     useEffect(()=>{
       console.log(window.location.pathname)
       if(window.location.pathname == "/"){
-        navigate("/album")
+        navigate("/list")
       }
     },[window.location])
     document.querySelectorAll('button').forEach(element=>{
