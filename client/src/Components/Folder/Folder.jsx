@@ -180,7 +180,7 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                             }
                             fileInput.oncancel = (e) => {
                                 console.log(e)
-                                // setLoading(false)
+                                setLoading(false)
                             }
                             fileInput.onclose = (e) => {
                                 console.log(e);
