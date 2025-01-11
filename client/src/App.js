@@ -12,7 +12,8 @@ import { SpinnerProvider } from './Components/ButtonComponent';
 function App() {
     const navigate = useNavigate();
     useEffect(()=>{
-      if(window.location.pathname != "/"){
+      console.log(window.location.pathname)
+      if(window.location.pathname != "/list"){
         navigate("/album")
       } else if(window.location.pathname == "/list"){
         navigate("/list")
