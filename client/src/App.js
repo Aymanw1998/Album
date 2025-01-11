@@ -13,10 +13,8 @@ function App() {
       console.log(window.location.pathname)
       if(window.location.pathname == "/"){
         navigate("/album")
-      } else if(window.location.pathname == "/list"){
-        //navigate("/list")
       }
-    },[])
+    },[window.location])
     document.querySelectorAll('button').forEach(element=>{
       element.onclick = function(){}
   })
@@ -25,7 +23,7 @@ function App() {
       <>
           <Routes>
             <Route path="/folder/:id" element={<Folder/>}/>
-            <Route path='/album/*' element={<Main/>}/>
+            <Route path='/album' element={<Main/>}/>
             <Route path='/list' element={<Main/>}/>
           </Routes>
       </>
