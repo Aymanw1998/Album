@@ -40,8 +40,9 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
 
     // ✅ פונקציה להוספת קובץ
     const addFile = async(folder, thisFiles) => {
+        
         const newData = [ ...folders ]; 
-
+        console.log(thisFiles);
         for(const thisFile of thisFiles){
             const formData = new FormData();
             formData.append('file', thisFile);
@@ -76,13 +77,13 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
         if (data[0].type == 'folder') {
             console.log(folder._id);
             for(const thisFile of folder.children){
-                console.log(thisFile.id, thisFile.parent._id);
                 try{
                     await SERVER.removeFileFromFolder(folder._id, thisFile.id);
                 }catch(err){        
                     console.error("Error delete file:", err);
                 }
             await SERVER.deleteF(folder._id);
+            await fetchData();
             }
         } else {
             for(const thisFile of data){
@@ -93,8 +94,6 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                     console.error("Error delete file:", err);
                 }
             }
-            // setFolders([...folders]);
-            fetchData();
         }
         fetchData();
     };

@@ -190,7 +190,7 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                         </>
                     )}
                     {/* {isMatch &&<button onClick={() => {deleteItem(data, data.type == "folder"? data : data.parent); closeModal()}}>❌</button>} */}
-                    {!onSelect && isMatch &&<ButtonComponent label={"❌"} performTask={() => {deleteItem([data], data.type == "folder"? data : data.parent); closeModal()}}/>}
+                    {!onSelect && isMatch &&<ButtonComponent label={"❌"} performTask={async() => {setLoading(true); closeModal(); await deleteItem([data], data.type == "folder"? data : data.parent); setLoading(false);}}/>}
 
                 </div>
             </div>
@@ -286,7 +286,7 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                         {"סגור"}
                     </button>
                     {isMatch &&<button 
-                        onClick={()=> {deleteItem([modalImage],data.type=="folder" ? data : data.parent); closeModal()}} 
+                        onClick={async()=> {setLoading(true); closeModal(); await deleteItem([modalImage],data.type=="folder" ? data : data.parent); setLoading(false)}} 
                         style={{
                             position: 'absolute',
                             bottom: '10px',
