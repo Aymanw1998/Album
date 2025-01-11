@@ -68,16 +68,20 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
     const [thisFiles, setThisFiles] = useState(null)
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
-    const onlineImage = (folder,files) => {
-        files.forEach((file, index) => {
+    const onlineImage = async(folder,files) => {
+        const list = [];
+        files.map((file, index) => {
             const reader = new FileReader();
-            reader.onload = () => {
+            reader.onload = async() => {
                 const base64Image = reader.result;
-                setImgSrc([...imgSrc,reader.result]);
-                setThisFiles(files);
+                console.log(list);
+                await list.push(reader.result)
+                await setImgSrc([...imgSrc,list]);
             }
             reader.readAsDataURL(file)  // המרת הקובץ לפורמט base64
         })
+        console.log("done", list)
+        await setThisFiles(files);
     }
     
     useEffect(()=>{

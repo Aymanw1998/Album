@@ -6,17 +6,19 @@ import ButtonComponent from "./ButtonComponent";
 const UploadImage = ({ setLoading, closeModal, folder, addFile, imgSrc, thisFiles }) => {
     return (
         <>
-            {Array.isArray(imgSrc) && imgSrc.length > 0 ? (
+        {console.log(imgSrc[0])}
+            {imgSrc[0].length > 0 ? (
                 imgSrc.map((src, index) => (
+                    <>{console.log(index,imgSrc[0].length)}
                     <img
                         key={index}
                         style={{ 
                             width: '80%', 
                             height: '80%',  }}
                         className="uploadIMG"
-                        src={src ? src : IMGNOTFOUNT}
+                        src={src[0] ? src[0] : IMGNOTFOUNT}
                         alt={`uploaded-${index}`}
-                    />
+                    /></>
                 ))
             ) : (
                 <p>לא נמצאו תמונות להצגה.</p>
