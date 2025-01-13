@@ -1,5 +1,5 @@
 header {
-    background-color: #52dfd3;
+    background-color: #74C6D7;
     width: 100%;
     color: rgb(17, 15, 15);
     justify-content: space-between;
@@ -22,7 +22,6 @@ header h1 {
     height: 30%;
     margin: 0 auto;
 }
-
 li {
     margin-left: 50px;
     cursor: pointer;   

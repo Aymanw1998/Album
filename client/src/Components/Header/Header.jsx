@@ -8,7 +8,13 @@ const Header = () => {
         <header>
             <div className='System'>
                 <img className ="nameSystem" src={nameSystem} alt="NAME SYSTEM" />
-                {/* <img className="logoSystem" src={IconSystem} alt="LOGO SYSTEM" /> */}
+            </div>
+            <div className="footer-icons">
+                <ul>
+                <li className='insta'><a href="https://www.instagram.com/jihan_alajo" target="_blank"><i className="fa fa-instagram fa-2x"></i></a></li>
+                    <li className='tel'><a href="tel:+972547756254" target="_blank"><i className="fa fa-phone-square fa-2x"></i></a></li>
+                    <li className='wa'><a href="https://wa.me/+972547756254" target="_blank"><i className="fa fa-whatsapp fa-2x"></i></a></li>                    
+                </ul>
             </div>
             {/* <nav>
                 <ul className="flex relative">
