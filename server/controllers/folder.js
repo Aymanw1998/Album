@@ -6,12 +6,16 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 const handleUpload = async(file) => {
-    const res = await cloudinary.uploader.upload(file, {resource_type: "auto",});
+    let res = await cloudinary.uploader.upload(file, {resource_type: "auto", folder: "jihan"});
+    res = await cloudinary.uploader.rename(res.public_id, res.public_id.split("/")[res.public_id.split("/").length - 1] );
+    console.log("add file", res )
     return res;
 }
 
-const handleRemove = async(id) => {
-    await cloudinary.uploader.destroy(id,(result)=>console.log(result));
+const handleRemove = async(file) => {
+    const id = file.id;
+    const res = await cloudinary.uploader.destroy(id,{resource_type: "image"},(result)=>console.log(result));
+    console.log("delete file", res )
     return;
 }
 
@@ -94,7 +98,7 @@ const addFileToFolder = async(req, res) => {
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
         const cldRes = await handleUpload(dataURI);
         const file = {
-            id: cldRes.public_id, data:cldRes.url, type:type,
+            id: cldRes.public_id.split("/")[cldRes.public_id.split("/").length -1], data:cldRes.url, type:type,
         }
         console.log(file);
         const updatedFolder = await Folder.findByIdAndUpdate(
@@ -116,6 +120,7 @@ const removeFileFromFolder = async(req, res) => {
         if(!folder) return ;
         var children = folder.children;
         console.log("before", children);
+        const file = children.filter(file=> file.id == id);
         children = children.filter(file=> file.id !== id);
         console.log("before", children);
         const updatedFolder = await Folder.findByIdAndUpdate(
@@ -123,7 +128,7 @@ const removeFileFromFolder = async(req, res) => {
         { children},
         { new: true }
         );
-        await handleRemove(id);
+        await handleRemove(file[0]);
         return res.status(200).json(updatedFolder);
     } catch(err){
         console.log(err);
@@ -140,7 +145,7 @@ const deletAll = async(req, res) => {
             if(folder.children.length > 0) {
                 folder.children.forEach(async(file)=> {
                     if("id" in file)
-                        await handleRemove(file.id);
+                        await handleRemove(file);
                     else console.log("no id");
                 });
             }

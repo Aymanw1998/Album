@@ -4,9 +4,10 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import "./App.css"
 
+import Header from "./Components/Header/Header"
 import Main from './Components/Main/Main';
 import Folder from './Components/Folder/Folder'
-
+import Footer from './Components/Footer/Footer'
 function App() {
     const navigate = useNavigate();
     useEffect(()=>{
@@ -21,11 +22,13 @@ function App() {
     return(
       
       <>
-          <Routes>
-            <Route path="/folder/:id" element={<Folder/>}/>
-            <Route path='/list' element={<Main/>}/>
-            <Route path='/album' element={<Main/>}/>
-          </Routes>
+        <Header/>
+        <Routes>
+          <Route path="/folder/:id" element={<Folder/>}/>
+          <Route path='/list' element={<Main/>}/>
+          <Route path='/album' element={<Main/>}/>
+        </Routes>
+        <Footer/>
       </>
     )
 }

@@ -41,13 +41,14 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
     // ✅ פונקציה להוספת קובץ
     const addFile = async(folder, thisFiles) => {
         
-        const newData = [ ...folders ]; 
-        console.log(thisFiles);
+        console.log("my files", thisFiles);
         for(const thisFile of thisFiles){
             const formData = new FormData();
             formData.append('file', thisFile);
             formData.append('type', 'file');
             try{
+            console.log(folders)
+            console.log(folder);
             await SERVER.addFileToFolder(folder._id, formData)
             }catch(err){        
                 console.error("Error uploading file:", err);
@@ -65,9 +66,8 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                 return;
             }
             const newFolder = { name: newFolderName, children: [], type: 'folder' };
-            setFolders([...folders, newFolder]);
-            setFilteredData([...folders, newFolder]);
             await SERVER.createF(newFolder);
+            await fetchData()
         }
     };
 

@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect, } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import UploadImage from '../UploadImage';
+import UploadImage from '../UploadImages/UploadImage';
 import { useNavigate } from 'react-router-dom';
 
 import FOLDER from "../../images/folder.jpg"
@@ -68,22 +68,6 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
     const [thisFiles, setThisFiles] = useState(null)
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
-    const onlineImage = async(folder,files) => {
-        const list = [];
-        files.map((file, index) => {
-            const reader = new FileReader();
-            reader.onload = async() => {
-                const base64Image = reader.result;
-                console.log(list);
-                await list.push(reader.result)
-                await setImgSrc([...imgSrc,list]);
-            }
-            reader.readAsDataURL(file)  // המרת הקובץ לפורמט base64
-        })
-        console.log("done", list)
-        await setThisFiles(files);
-    }
-    
     useEffect(()=>{
         if(!data){
             fetchData();
@@ -174,11 +158,12 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                             fileInput.accept = "image/*";
                             fileInput.style.display = 'none';
                             fileInput.multiple = true; // מאפשר בחירה של מספר קבצים
-                            fileInput.onchange = (e) => {
+                            fileInput.onchange = async(e) => {
                                 console.log(e.target.files)
                                 const files = Array.from(e.target.files);
                                 if(files.length > 0){
-                                    onlineImage(dataH,files);
+                                    // onlineImage(dataH,files);
+                                    await addFile(dataH, files);
                                 }
                                 return;
                             }
@@ -344,23 +329,6 @@ const isMatch = paths.some(path => window.location.pathname.includes(path));
                     >
                         {"סגור"}
                     </button>
-                    <UploadImage setLoading={setLoading} closeModal={closeModal} pages={pages} folder={data} addFile={addFile} thisFiles={thisFiles} imgSrc={imgSrc} title={title} setTitle={setTitle} text={text} setText={setText}/>
-                {/* <button     
-                        onClick={closeModal} 
-                        style={{
-                            position: 'absolute',
-                            top: '20px',
-                            right: '20px',
-                            padding: '10px 20px',
-                            background: 'red',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        סגור
-                    </button> */}
                 </div>
             )}
         </div>): (

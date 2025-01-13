@@ -1,7 +1,7 @@
 import React from "react";
-import IMGNOTFOUNT from "./../images/img_not_found.jpg";
-import "./../Components/UploadImage.css";
-import ButtonComponent from "./ButtonComponent";
+import IMGNOTFOUNT from "../../images/img_not_found.jpg";
+import "./UploadImage.css";
+import ButtonComponent from "../ButtonComponent";
 
 const UploadImage = ({ setLoading, closeModal, folder, addFile, imgSrc, thisFiles }) => {
     return (
