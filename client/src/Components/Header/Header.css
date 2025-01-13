@@ -23,7 +23,7 @@ header h1 {
     margin: 0 auto;
 }
 li {
-    margin-left: 50px;
+    margin-left: 5vw;
     cursor: pointer;   
 }
 li:hover {
