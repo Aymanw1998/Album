@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, BrowserRouter, useNavigate} from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Routes, Route, useNavigate} from 'react-router-dom';
 import "./App.css"
 
 import Header from "./Components/Header/Header"
 import Main from './Components/Main/Main';
-import Folder from './Components/Folder/Folder'
 import Footer from './Components/Footer/Footer'
+import Album from "./Components/View/Album/Album"
+import Photos from "./Components/View/Photos/photos"
 function App() {
     const navigate = useNavigate();
     useEffect(()=>{
@@ -24,9 +23,9 @@ function App() {
       <>
         <Header/>
         <Routes>
-          <Route path="/folder/:id" element={<Folder/>}/>
+          <Route path="/folder/:id" element={<Photos/>}/>
           <Route path='/list' element={<Main/>}/>
-          <Route path='/album' element={<Main/>}/>
+          <Route path='/album' element={<Album/>}/>
         </Routes>
         <Footer/>
       </>
