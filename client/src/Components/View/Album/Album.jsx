@@ -1,12 +1,13 @@
 import React, {useState, useEffect}from "react";
 import { SERVER } from "../../../services/Folder.service";
+import Loading from "../../Loading/Loading"
 import "./Album.css"
 import FOLDER from "../../../images/folder.jpg"
 import { useNavigate } from "react-router-dom";
 
 const Album = () => {
     const navigate = useNavigate();
-    const [folders, setFolders] = useState([])
+    const [folders, setFolders] = useState()
     const [isLoading,setIsLoading] = useState(false);
     const fetchData = async () => {
             console.log("fetchData ABLUM")
@@ -30,6 +31,9 @@ const Album = () => {
         }, []);
     
     return (<>
+        {!folders && <Loading style={{margin: "0 auto"}}/>}
+        {folders && folders.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין מידע להצגה</h1>}
+
         <div className="service-container">
             {folders && folders.map((service, index) => (
                 <div onClick={()=>navigate("/folder/"+service._id)} key={index} className="service-card">

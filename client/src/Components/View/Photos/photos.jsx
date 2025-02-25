@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SERVER } from "../../../services/Folder.service";
+import Loading from "../../Loading/Loading";
 import "./Photos.css"
 
 import {Lightbox} from "yet-another-react-lightbox"
@@ -36,11 +37,13 @@ const Photos = (props) => {
             fetchData();
         },[])
     return (<>
+        {!folder && <Loading style={{margin: "0 auto"}}/>}
+        {folder && folder.children.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין תמונות להצגה</h1>}
             <div className="service-containerP">
                 {folder && folder.children.length > 0 && folder.children.map((service, i) => (
                     <div key={i} className="service-cardP" onClick={()=>setIndex(i)}>
                         <img src={service.data} alt="serviceP" />
-                    </div>
+                    </div> 
                     ))}
                 {folder && folder.children.length > 0 && slides.length > 0 &&<Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
 
