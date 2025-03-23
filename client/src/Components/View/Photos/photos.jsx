@@ -38,6 +38,7 @@ const Photos = (props) => {
             fetchData();
         },[])
     return (<>
+        {folder && <h1 style={{textAlign: "center"}}><b>{folder.name}</b></h1>}
         {!folder && <Loading style={{margin: "0 auto"}}/>}
         {folder && folder.children.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין תמונות להצגה</h1>}
             <div className="service-containerP">

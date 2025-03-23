@@ -69,7 +69,9 @@ const Album = () => {
             await fetchData();
         }
     return (<>
-        <button className='addFolder' onClick={addFolder} style={{}}>{"הוסף אלבום"}</button>
+            <h1 style={{textAlign: "center"}}><b>{"אלבומי הפינוק של גיגי"}</b></h1>
+
+        {/* <button className='addFolder' onClick={addFolder} style={{}}>{"הוסף אלבום"}</button> */}
         {!folders && <Loading style={{margin: "0 auto"}}/>}
         {folders && folders.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין מידע להצגה</h1>}
 
@@ -82,8 +84,8 @@ const Album = () => {
             {folders && folders.map((service, index) => (
                 <div onClick={()=>{setSelectedFolder(service);setOpen(true)}} key={index} className="service-card">
                     <img src={service.children.length > 0 ? service.children[0].data : FOLDER } alt="service" />
-                    <div className="service-overlayS">
-                        <h2 className="service-titleS">{service.name}</h2>
+                    <div className="service-overlay">
+                        <h2 className="service-title">{service.name}</h2>
                     </div>
                 </div>
                 ))}

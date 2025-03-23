@@ -43,6 +43,10 @@
     }
 }
 @media screen and (min-width: 720px){
+    .service-cardP {
+        width: 300px;
+        height: 300px;
+    }
     .service-title {
         color: white;
         font-size: 50px;

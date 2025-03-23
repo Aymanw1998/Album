@@ -94,6 +94,7 @@ const Photos = (props) => {
         }
     return (<>
         {!folder && <Loading style={{margin: "0 auto"}}/>}
+        {folder && <h1 style={{textAlign: "center"}}><b>{folder.name}</b></h1>}
         <div className="service-cardP" onClick={addFile}>
             <img key={-1} src={ADDF} alt="serviceP" />
         </div>

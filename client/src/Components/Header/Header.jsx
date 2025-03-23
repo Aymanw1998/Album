@@ -13,7 +13,7 @@ const Header = () => {
         <header>
             <div className='System'>
                 <img className ="logoSystem" src={nameSystem} alt="NAME SYSTEM" onClick={()=>{
-                    if(window.location.pathname.includes("filesys")){
+                    if(window.location.pathname.includes("foldersys")){
                         navigate("system");
                     }
                     else navigate("album");

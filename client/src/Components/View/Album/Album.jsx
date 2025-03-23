@@ -31,6 +31,8 @@ const Album = () => {
         }, []);
     
     return (<>
+        <h1 style={{textAlign: "center"}}><b>{"אלבומי הפינוק של גיגי"}</b></h1>
+
         {!folders && <Loading style={{margin: "0 auto"}}/>}
         {folders && folders.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין מידע להצגה</h1>}
 
