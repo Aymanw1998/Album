@@ -3,10 +3,11 @@ import { Routes, Route, useNavigate} from 'react-router-dom';
 import "./App.css"
 
 import Header from "./Components/Header/Header"
-import Main from './Components/Main/Main';
 import Footer from './Components/Footer/Footer'
-import Album from "./Components/View/Album/Album"
-import Photos from "./Components/View/Photos/photos"
+import AlbumV from "./Components/View/Album/Album"
+import PhotosV from "./Components/View/Photos/photos"
+import AlbumC from "./Components/Controller/Album/Album"
+import PhotosC from "./Components/Controller/Photos/photos"
 function App() {
     const navigate = useNavigate();
     useEffect(()=>{
@@ -23,9 +24,12 @@ function App() {
       <>
         <Header/>
         <Routes>
-          <Route path="/folder/:id" element={<Photos/>}/>
-          <Route path='/list' element={<Main/>}/>
-          <Route path='/album' element={<Album/>}/>
+          {/* View */}
+          <Route path='/album' element={<AlbumV/>}/>
+          <Route path="/folder/:id" element={<PhotosV/>}/>
+          {/* System */}
+          <Route path='/system' element={<AlbumC/>}/>
+          <Route path="/foldersys/:id" element={<PhotosC/>}/>
         </Routes>
         <Footer/>
       </>

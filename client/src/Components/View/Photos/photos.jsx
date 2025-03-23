@@ -13,6 +13,7 @@ const Photos = (props) => {
     const [folder, setFolder] = useState()
     const [index, setIndex] = useState(-1);
     const [slides, setSlides] = useState([]);
+    useEffect(()=>{console.log(folder,slides)},[slides])
     const fetchData = async() => {
             const urlArray = window.location.pathname.split("/");
             const id = urlArray[urlArray.length-1];
@@ -22,8 +23,8 @@ const Photos = (props) => {
                     setFolder(getF.data);
                     let list = [];
                     if(getF.data && getF.data.children.length > 0){
-                        getF.data.children.map((serivce) => (
-                            list.push({src: serivce.data})
+                        getF.data.children.map((serivce, i) => (
+                            list.push({id: serivce.id, src: serivce.data, index: i})
                         ))
                         setSlides(list);
                     }
@@ -40,12 +41,12 @@ const Photos = (props) => {
         {!folder && <Loading style={{margin: "0 auto"}}/>}
         {folder && folder.children.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין תמונות להצגה</h1>}
             <div className="service-containerP">
-                {folder && folder.children.length > 0 && folder.children.map((service, i) => (
-                    <div key={i} className="service-cardP" onClick={()=>setIndex(i)}>
-                        <img src={service.data} alt="serviceP" />
+                {folder && folder.children.length > 0 && folder.children.map((service,i) => (
+                    <div className="service-cardP" onClick={()=>setIndex(i)}>
+                        <img key={i} src={service.data} alt="serviceP" />
                     </div> 
                     ))}
-                {folder && folder.children.length > 0 && slides.length > 0 &&<Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
+                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
 
             </div>
     </>)

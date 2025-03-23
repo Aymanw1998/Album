@@ -3,15 +3,21 @@ import React, {useEffect, useState} from 'react';
 import "./Header.css"
 
 import nameSystem from "../../images/logo.jpeg"
-import instagramIcon from "../../images/instagram-icon.png"
-import whatsappIcon from "../../images/whatsapp-icon.png"
-import telIcon from "../../images/tel-icon.png"
+import instagramIcon from "../../images/instagram.png"
+import whatsappIcon from "../../images/Whatsapp.png"
+import telIcon from "../../images/call.png"
 import { useNavigate } from 'react-router-dom';
 const Header = () => {
+    const navigate = useNavigate();
 	return (
         <header>
             <div className='System'>
-                <img className ="nameSystem" src={nameSystem} alt="NAME SYSTEM" />
+                <img className ="logoSystem" src={nameSystem} alt="NAME SYSTEM" onClick={()=>{
+                    if(window.location.pathname.includes("filesys")){
+                        navigate("system");
+                    }
+                    else navigate("album");
+                }}/>
             </div>
             <div className="footer-icons">
                 <ul>
