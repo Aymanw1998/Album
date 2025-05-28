@@ -1,7 +1,6 @@
 // Folder.service.jsx
 import axios from "axios";
-const URL = "https://album-server.onrender.com";
-// const URL = "http://localhost:2025";
+const URL = process.env.SERVER_URI;
 const BID = `${URL}/api/folders`;
 
 const handleError = (error) => {
