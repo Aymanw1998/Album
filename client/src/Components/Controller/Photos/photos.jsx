@@ -7,7 +7,7 @@ import ADDF from "../../../images/addFile.png"
 
 import {Lightbox} from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
-import {Captions, Download, Fullscreen, Thumbnails, Zoom} from "yet-another-react-lightbox/plugins";
+import {Captions, Download, Fullscreen, Thumbnails, Zoom, Video} from "yet-another-react-lightbox/plugins";
 import "yet-another-react-lightbox/plugins/captions.css"
 import "yet-another-react-lightbox/plugins/thumbnails.css"
 
@@ -17,6 +17,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+const isVideo = (url)=> [".mp4", "video", ".webm", ".ogg"].some(ext => url.toLowerCase().includes(ext));
 const Photos = (props) => {
     const [folder, setFolder] = useState()
     const [index, setIndex] = useState(-1);
@@ -36,7 +37,23 @@ const Photos = (props) => {
                     let list = [];
                     if(getF.data && getF.data.children.length > 0){
                         getF.data.children.map((serivce, i) => (
-                            list.push({id: serivce.id, src: serivce.data, index: i})
+                            list.push(isVideo(serivce.data)? {
+                            id:serivce.id,
+                            type: "video",
+                            poster: "https://dummyimage.com/1280x720/000/fff&text=▶", // או תייצר preview thumbnail
+                            width: 1280,
+                            height: 720,
+                            sources: [
+                                {
+                                src: serivce.data,
+                                type: "video/mp4", // ודא שזה הפורמט של הווידאו
+                                },
+                            ],
+                        }: {
+                        id: serivce.id, 
+                        src: serivce.data, 
+                        type: "image",
+                    })
                         ))
                         setSlides(list);
                     }
@@ -112,14 +129,17 @@ const Photos = (props) => {
             <div className="spinner"></div>{cmdd == "u" ? "מעלה קבצים..." : "מוחק קבצים..."}
         </div>
         {folder && folder.children.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין תמונות להצגה</h1>}
-        <div className="service-containerP">
-            {folder && folder.children.length > 0 && folder.children.map((service,i) => {
-                <div className="service-cardP" onClick={()=>{setIndex(i); setSelectedFile(service);setOpen(true)}}>
-                    {service.data.includes(".mp4") || service.data.includes("video") ? <video src={service.data} alt="serviceP" controls muted/>:<img key={i} src={service.data} alt="serviceP" />}
-                </div> 
-            })}
-            {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0 && ok} slides={slides} close={()=> {setOk(false);setIndex(-1)}}/>}
-        </div>
+                {folder && folder.children.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין תמונות להצגה</h1>}
+            <div className="service-containerP">
+                {folder && folder.children.length > 0 && folder.children.map((service,i) => (
+                    <div className="service-cardP" onClick={()=>{setIndex(i);setOpen(true)}}>
+                        {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
+                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />}
+                    </div> 
+                    ))}
+                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails, Video]} index={index} open={index >= 0 && ok} slides={slides} close={()=> setIndex(-1)}/>}
+
+            </div>
         <Dialog
             open={open}
             onClose={()=>{setOpen(false)}}
