@@ -24,6 +24,7 @@ const Photos = (props) => {
     const [ok, setOk] = useState(false);
     const [open, setOpen]= useState(false);
     const [selectedFile, setSelectedFile] = useState();
+    const [cmdd, setCmdd] = useState("u");//delete "d"
     useEffect(()=>{console.log(folder,slides)},[slides])
     const fetchData = async() => {
             const urlArray = window.location.pathname.split("/");
@@ -49,18 +50,22 @@ const Photos = (props) => {
             fetchData();
         },[])
 
+        const showUploadOverlay = () => document.getElementById("upload-overlay").style.display = "flex";
+        const hideUploadOverlay = () => document.getElementById("upload-overlay").style.display = "none";
         const addFile = async()=>{
+            setCmdd("u");
             // setLoading(true);
             console.log("folder", folder.name);
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
-            fileInput.accept = "image/*";
+            fileInput.accept = "image/* ,video/*";
             fileInput.style.display = 'none';
             fileInput.multiple = true; // מאפשר בחירה של מספר קבצים
             fileInput.onchange = async(e) => {
                 console.log(e.target.files)
                 const files = Array.from(e.target.files);
                 if(files.length > 0){
+                    showUploadOverlay(); // הצגת טעינה
                     // onlineImage(dataH,files);
                     console.log("my files", files);
                     for(const thisFile of files){
@@ -72,7 +77,9 @@ const Photos = (props) => {
                             await SERVER.addFileToFolder(folder._id, formData)
                         }catch(err){console.error("Error uploading file:", err)}
                     }
-                    fetchData();
+                    await fetchData();
+                    hideUploadOverlay(); // הסתרת טעינה
+
                 }
                 return;
             }
@@ -86,11 +93,14 @@ const Photos = (props) => {
             fileInput.click();
         };
         const deleteFile = async(thisFile)=> {
+            setCmdd("d")
             console.log(thisFile, folder);
             // return;
+            showUploadOverlay();
             try{await SERVER.removeFileFromFolder(folder._id, thisFile.id);}
             catch(err){console.error("Error delete file:", err);}
             await fetchData();
+            hideUploadOverlay();
         }
     return (<>
         {!folder && <Loading style={{margin: "0 auto"}}/>}
@@ -98,13 +108,16 @@ const Photos = (props) => {
         <div className="service-cardP" onClick={addFile}>
             <img key={-1} src={ADDF} alt="serviceP" />
         </div>
+        <div id="upload-overlay" className="upload-overlay" style={{display:"none"}}>
+            <div className="spinner"></div>{cmdd == "u" ? "מעלה קבצים..." : "מוחק קבצים..."}
+        </div>
         {folder && folder.children.length <= 0 && <h1 style={{display: "grid",justifyContent: "center", margin: "0 auto"}}>אין תמונות להצגה</h1>}
         <div className="service-containerP">
-            {folder && folder.children.length > 0 && folder.children.map((service,i) => (
+            {folder && folder.children.length > 0 && folder.children.map((service,i) => {
                 <div className="service-cardP" onClick={()=>{setIndex(i); setSelectedFile(service);setOpen(true)}}>
-                    <img key={i} src={service.data} alt="serviceP" />
+                    {service.data.includes(".mp4") || service.data.includes("video") ? <video src={service.data} alt="serviceP" controls muted/>:<img key={i} src={service.data} alt="serviceP" />}
                 </div> 
-                ))}
+            })}
             {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0 && ok} slides={slides} close={()=> {setOk(false);setIndex(-1)}}/>}
         </div>
         <Dialog

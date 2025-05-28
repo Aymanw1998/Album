@@ -6,10 +6,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 const handleUpload = async(file) => {
-    let res = await cloudinary.uploader.upload(file, {resource_type: "auto", folder: "jihan"});
-    res = await cloudinary.uploader.rename(res.public_id, res.public_id.split("/")[res.public_id.split("/").length - 1] );
-    console.log("add file", res )
-    return res;
+    let res
+    try{
+        res = await cloudinary.uploader.upload(file, {resource_type: "auto", folder: "jihan"});
+        console.log("res", res.public_id, res.public_id.split("/")[res.public_id.split("/").length - 1])
+        res = await cloudinary.uploader.rename(res.public_id, res.public_id.split("/")[res.public_id.split("/").length - 1] );
+        console.log("add file", res )
+        return res;
+    }
+    catch(err) {
+        console.log(err)
+        return res;
+    }
 }
 
 const handleRemove = async(file) => {
@@ -24,6 +32,7 @@ const get = async (req, res) => {
     try{
         console.log("get folder");
         const folders = await Folder.find();
+        console.log("folders",folders);
         res.status(200).json(folders);
     } catch(err){
         console.log(err);

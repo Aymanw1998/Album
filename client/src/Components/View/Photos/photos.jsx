@@ -5,34 +5,50 @@ import "./Photos.css"
 
 import {Lightbox} from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
-import {Captions, Download, Fullscreen, Thumbnails, Zoom} from "yet-another-react-lightbox/plugins";
+import {Captions, Download, Fullscreen, Thumbnails, Zoom, Video} from "yet-another-react-lightbox/plugins";
 import "yet-another-react-lightbox/plugins/captions.css"
 import "yet-another-react-lightbox/plugins/thumbnails.css"
 
+const isVideo = (url)=> [".mp4", "video", ".webm", ".ogg"].some(ext => url.toLowerCase().includes(ext));
 const Photos = (props) => {
     const [folder, setFolder] = useState()
     const [index, setIndex] = useState(-1);
     const [slides, setSlides] = useState([]);
-    useEffect(()=>{console.log(folder,slides)},[slides])
+    useEffect(()=>{console.log("slides", slides)},[slides]);
     const fetchData = async() => {
             const urlArray = window.location.pathname.split("/");
             const id = urlArray[urlArray.length-1];
             const getF = await SERVER.getF(id);
-                  if(getF.data){
-                    console.log(getF.data);
-                    setFolder(getF.data);
-                    let list = [];
-                    if(getF.data && getF.data.children.length > 0){
-                        getF.data.children.map((serivce, i) => (
-                            list.push({id: serivce.id, src: serivce.data, index: i})
-                        ))
-                        setSlides(list);
-                    }
-                    return;
-                  }
-                  else{
-                    setFolder(null)
-                  }
+            if(getF.data){
+            console.log(getF.data);
+            setFolder(getF.data);
+            let list = [];
+            if(getF.data && getF.data.children.length > 0){
+                getF.data.children.map((serivce, i) => (
+                    list.push(isVideo(serivce.data)? {
+                            id:serivce.id,
+                            type: "video",
+                            poster: "https://dummyimage.com/1280x720/000/fff&text=▶", // או תייצר preview thumbnail
+                            width: 1280,
+                            height: 720,
+                            sources: [
+                                {
+                                src: serivce.data,
+                                type: "video/mp4", // ודא שזה הפורמט של הווידאו
+                                },
+                            ],
+                        }: {
+                        id: serivce.id, 
+                        src: serivce.data, 
+                        type: "image",
+                    })
+                ))
+                setSlides(list);
+            }
+            }
+            else{
+            setFolder(null)
+            }
         }
         useEffect(()=>{
             fetchData();
@@ -44,10 +60,11 @@ const Photos = (props) => {
             <div className="service-containerP">
                 {folder && folder.children.length > 0 && folder.children.map((service,i) => (
                     <div className="service-cardP" onClick={()=>setIndex(i)}>
-                        <img key={i} src={service.data} alt="serviceP" />
+                        {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
+                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />}
                     </div> 
                     ))}
-                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
+                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails, Video]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
 
             </div>
     </>)
