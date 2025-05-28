@@ -17,6 +17,28 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+
+const generateThumbnail = (videoUrl) => {
+  return new Promise((resolve) => {
+    const video = document.createElement("video");
+    video.src = videoUrl;
+    video.crossOrigin = "anonymous";
+    video.preload = "metadata";
+    video.currentTime = 1;
+
+    video.addEventListener("loadeddata", () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageUrl = canvas.toDataURL("image/png");
+      resolve(imageUrl);
+    });
+  });
+};
+
+
 const isVideo = (url)=> [".mp4", "video", ".webm", ".ogg"].some(ext => url.toLowerCase().includes(ext));
 const Photos = (props) => {
     const [folder, setFolder] = useState()
@@ -32,17 +54,15 @@ const Photos = (props) => {
             const id = urlArray[urlArray.length-1];
             const getF = await SERVER.getF(id);
                   if(getF.data){
-                    console.log(getF.data);
                     setFolder(getF.data);
                     let list = [];
                     if(getF.data && getF.data.children.length > 0){
-                        getF.data.children.map((serivce, i) => (
+                        getF.data.children.map(async(serivce, i) => {
+                            const thumbnail = await generateThumbnail(serivce.data);
                             list.push(isVideo(serivce.data)? {
                             id:serivce.id,
                             type: "video",
-                            poster: "https://dummyimage.com/1280x720/000/fff&text=▶", // או תייצר preview thumbnail
-                            width: 1280,
-                            height: 720,
+                            poster: thumbnail,
                             sources: [
                                 {
                                 src: serivce.data,
@@ -54,7 +74,7 @@ const Photos = (props) => {
                         src: serivce.data, 
                         type: "image",
                     })
-                        ))
+                    })
                         setSlides(list);
                     }
                     return;
