@@ -92,7 +92,7 @@ const Photos = (props) => {
                         {isVideo(service.data) && <video key={i} src={service.data} controls muted />}
                     </div> 
                     ))}
-                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
+                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails, Video]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
 
             </div>
     </>)
