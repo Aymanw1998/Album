@@ -60,6 +60,7 @@ const Photos = (props) => {
                         getF.data.children.map(async(serivce, i) => {
                             const thumbnail = await generateThumbnail(serivce.data);
                             list.push(isVideo(serivce.data)? {
+                            index: i,
                             id:serivce.id,
                             type: "video",
                             poster: thumbnail,
@@ -71,6 +72,7 @@ const Photos = (props) => {
                             ],
                         }: {
                         id: serivce.id, 
+                        index: i,
                         src: serivce.data, 
                         type: "image",
                     })

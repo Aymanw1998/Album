@@ -49,6 +49,7 @@ const Photos = (props) => {
                     const thumbnail = await generateThumbnail(serivce.data);
                     list.push(isVideo(serivce.data)? {
                             id:serivce.id,
+                            index: i,
                             type: "video",
                             poster: thumbnail, // או תייצר preview thumbnail
                             width: "100%",
@@ -60,10 +61,11 @@ const Photos = (props) => {
                                 },
                             ],
                         }: {
-                        id: serivce.id, 
-                        src: serivce.data, 
-                        type: "image",
-                    })
+                            index: i,
+                            id: serivce.id, 
+                            src: serivce.data, 
+                            type: "image",
+                        })
             })
                 setSlides(list);
             }
