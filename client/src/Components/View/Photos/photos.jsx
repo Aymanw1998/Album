@@ -37,17 +37,17 @@ const Photos = (props) => {
     const [slides, setSlides] = useState([]);
     useEffect(()=>{console.log("slides", slides)},[slides]);
     const fetchData = async() => {
-            const urlArray = window.location.pathname.split("/");
-            const id = urlArray[urlArray.length-1];
-            const getF = await SERVER.getF(id);
-            if(getF.data){
-            console.log(getF.data);
+        const urlArray = window.location.pathname.split("/");
+        const id = urlArray[urlArray.length-1];
+        const getF = await SERVER.getF(id);
+        if(getF.data){
             setFolder(getF.data);
-            let list = [];
             if(getF.data && getF.data.children.length > 0){
-                getF.data.children.map(async(serivce, i) => {
-                    const thumbnail = await generateThumbnail(serivce.data);
-                    list.push(isVideo(serivce.data)? {
+                const  slidesReady= await Promise.all(getF.data.children.map(async(serivce, i) => {
+                    try{
+                        const isVid = isVideo(serivce.data);
+                        const thumbnail = isVid ? await generateThumbnail(serivce.data): null;
+                        return  isVideo(serivce.data) ?{
                             id:serivce.id,
                             index: i,
                             type: "video",
@@ -60,23 +60,27 @@ const Photos = (props) => {
                                 type: "video/mp4", // ודא שזה הפורמט של הווידאו
                                 },
                             ],
-                        }: {
+                        } : {
                             index: i,
                             id: serivce.id, 
                             src: serivce.data, 
                             type: "image",
-                        })
-            })
-                setSlides(list);
-            }
-            }
-            else{
-            setFolder(null)
-            }
+                        }
+                    } catch(err){
+                        console.error("Thumbnial error: ", err);
+                        return null;
+                    }
+                }))
+                setSlides(slidesReady.filter(Boolean));
+            } else setSlides([]);
+        } else{
+            setFolder(null);
+            setSlides([]);
         }
-        useEffect(()=>{
-            fetchData();
-        },[])
+    }
+    useEffect(()=>{
+        fetchData();
+    },[])
     return (<>
         {folder && <h1 style={{textAlign: "center"}}><b>{folder.name}</b></h1>}
         {!folder && <Loading style={{margin: "0 auto"}}/>}
@@ -84,11 +88,12 @@ const Photos = (props) => {
             <div className="service-containerP">
                 {folder && folder.children.length > 0 && folder.children.map((service,i) => (
                     <div className="service-cardP" onClick={()=>setIndex(i)}>
-                        {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
-                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />}
+                        <img key={i} src={service.data} alt="serviceP"/>
+                        {/* {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
+                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />} */}
                     </div> 
                     ))}
-                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails, Video]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
+                {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
 
             </div>
     </>)

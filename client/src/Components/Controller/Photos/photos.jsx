@@ -53,37 +53,43 @@ const Photos = (props) => {
             const urlArray = window.location.pathname.split("/");
             const id = urlArray[urlArray.length-1];
             const getF = await SERVER.getF(id);
-                  if(getF.data){
-                    setFolder(getF.data);
-                    let list = [];
-                    if(getF.data && getF.data.children.length > 0){
-                        getF.data.children.map(async(serivce, i) => {
-                            const thumbnail = await generateThumbnail(serivce.data);
-                            list.push(isVideo(serivce.data)? {
-                            index: i,
-                            id:serivce.id,
-                            type: "video",
-                            poster: thumbnail,
-                            sources: [
-                                {
-                                src: serivce.data,
-                                type: "video/mp4", // ודא שזה הפורמט של הווידאו
-                                },
-                            ],
-                        }: {
-                        id: serivce.id, 
-                        index: i,
-                        src: serivce.data, 
-                        type: "image",
-                    })
-                    })
-                        setSlides(list);
-                    }
-                    return;
-                  }
-                  else{
-                    setFolder(null)
-                  }
+            if(getF.data){
+                setFolder(getF.data);
+                if(getF.data && getF.data.children.length > 0){
+                    const slidesReady = await Promise.all(getF.data.children.map(async(serivce, i) => {
+                        try{
+                            const isVid = isVideo(serivce.data);
+                            const thumbnail = isVid ? await generateThumbnail(serivce.data) : null;
+                            return  isVideo(serivce.data) ?{
+                                id:serivce.id,
+                                index: i,
+                                type: "video",
+                                poster: thumbnail, // או תייצר preview thumbnail
+                                width: "100%",
+                                height: "100%",
+                                sources: [
+                                    {
+                                    src: serivce.data,
+                                    type: "video/mp4", // ודא שזה הפורמט של הווידאו
+                                    },
+                                ],
+                            } : {
+                                index: i,
+                                id: serivce.id, 
+                                src: serivce.data, 
+                                type: "image",
+                            }
+                        } catch(err){
+                            console.error("Thumbnial error: ", err);
+                            return null;
+                        }
+                    }))
+                    setSlides(slidesReady.filter(Boolean));
+                } else setSlides([]);
+            } else{
+                setFolder(null);
+                setSlides([]);
+            }
         }
         useEffect(()=>{
             fetchData();
