@@ -88,9 +88,8 @@ const Photos = (props) => {
             <div className="service-containerP">
                 {folder && folder.children.length > 0 && folder.children.map((service,i) => (
                     <div className="service-cardP" onClick={()=>setIndex(i)}>
-                        <img key={i} src={service.data} alt="serviceP"/>
-                        {/* {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
-                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />} */}
+                        {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
+                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />}
                     </div> 
                     ))}
                 {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails]} index={index} open={index >= 0} slides={slides} close={()=> setIndex(-1)}/>}
