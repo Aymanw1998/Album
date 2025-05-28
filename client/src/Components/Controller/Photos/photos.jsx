@@ -134,7 +134,7 @@ const Photos = (props) => {
                 {folder && folder.children.length > 0 && folder.children.map((service,i) => (
                     <div className="service-cardP" onClick={()=>{setSelectedFile(service);setIndex(i);setOpen(true)}}>
                         {!isVideo(service.data) && <img key={i} src={service.data} alt="serviceP" />}
-                        {isVideo(service.data) && <video key={i} src={service.data} controls muted />}
+                        {isVideo(service.data) && <video key={i} src={service.data} />}
                     </div> 
                     ))}
                 {folder && folder.children.length > 0 && <Lightbox plugins={[Captions, Download, Fullscreen, Zoom, Thumbnails, Video]} index={index} open={index >= 0 && ok} slides={slides} close={()=> setIndex(-1)}/>}
