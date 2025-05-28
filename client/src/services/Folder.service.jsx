@@ -1,6 +1,6 @@
 // Folder.service.jsx
 import axios from "axios";
-const URL = process.env.SERVER_URI;
+const URL = process.env.REACT_APP_SERVER_URI;
 const BID = `${URL}/api/folders`;
 
 const handleError = (error) => {
